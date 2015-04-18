@@ -1,8 +1,8 @@
 window.onload = function () {
   'use strict';
 
-  var game
-    , ns = window['yofish'];
+  var game,
+        ns = window['yofish'];
 
   game = new Phaser.Game(640, 480, Phaser.AUTO, 'yofish-game');
   game.state.add('boot', ns.Boot);
