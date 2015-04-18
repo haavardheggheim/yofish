@@ -27,8 +27,13 @@
       
       this.updateScore();
 
+<<<<<<< Updated upstream
       this.player = this.add.sprite(x, this.game.height/5*4, 'player');
       this.player.anchor.setTo(0.5, 0.5);
+=======
+      this.player = this.add.sprite(x, 0, 'player');
+      this.player.anchor.setTo(1.0);
+>>>>>>> Stashed changes
       //this.input.onDown.add(this.onInputDown, this);
 
       this.enemy = this.add.sprite(this.game.width, 0, 'fish');
