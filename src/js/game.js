@@ -9,7 +9,7 @@
 
     create: function () {
       this.score = 0 
-
+      this.topScore = localStorage.getItem('topScore')==null?0:localStorage.getItem('topScore');
       var x = this.game.width / 2
         , y = this.game.height / 2;
 
@@ -34,25 +34,9 @@
     },
 
     update: function () {
-      // var x, y, cx, cy, dx, dy, angle, scale;
-
-      // x = this.input.position.x;
-      // y = this.input.position.y;
-      // cx = this.world.centerX;
-      // cy = this.world.centerY;
-
-      // angle = Math.atan2(y - cy, x - cx) * (180 / Math.PI);
-      // this.player.angle = angle;
-
-      // dx = x - cx;
-      // dy = y - cy;
-      // scale = Math.sqrt(dx * dx + dy * dy) / 100;
-
-      // this.player.scale.x = scale * 0.6;
-      // this.player.scale.y = scale * 0.6;
-
       if(Phaser.Math.distance(this.player.x, this.player.y, this.enemy.x, this.enemy.y)<this.player.width/2+this.enemy.width/2) {
-        //tweenstop
+        this.enemyTween.stop();
+        this.playerTween.stop();
         this.score++;
         console.log(Math.abs(this.player.x-this.enemy.x))
         if(Math.abs(this.player.x-this.enemy.x)<10) {
@@ -69,11 +53,12 @@
     },*/
 
     die: function() {
+      localStorage.setItem('topScore', Math.max(this.score, this.topScore));
       this.game.state.start('game');
     },
 
     updateScore: function () {
-      this.scoreText.text = "Score: " + this.score;
+      this.scoreText.text = "Score: " + this.score + " - Best: " + this.topScore;
     },
 
     placePlayer: function() {
