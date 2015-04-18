@@ -11,12 +11,10 @@
       this.background = this.add.sprite(this.game.width / 2, this.game.height / 2, 'background')
       this.background.anchor.setTo(0.5, 0.5);
 
-
-
       this.score = 0 
       this.topScore = localStorage.getItem('topScore')==null?0:localStorage.getItem('topScore');
       var x = this.game.width / 2
-        , y = this.game.height / 2;
+      , y = this.game.height / 2;
 
       this.game.stage.backgroundColor = '#acacac';
 
@@ -76,7 +74,7 @@
       },10000-this.score*10,"Linear",true);
       this.playerTween.onComplete.add(this.die,this);
       this.game.input.onDown.add(this.fire, this);
-  },
+    },
 
     placeEnemy: function() {
       this.enemy.x = this.game.width;
