@@ -18,13 +18,10 @@
     },
       
     loadResources: function () {
-<<<<<<< Updated upstream
-      this.load.image('player', 'assets/player.png');
       this.load.image('background', 'assets/underwater.jpg');
       this.load.image('fish', 'assets/fish.png');
-=======
+
       this.load.image('player', 'assets/fishhook.png');
->>>>>>> Stashed changes
       this.load.bitmapFont('minecraftia', 'assets/minecraftia.png', 'assets/minecraftia.xml');
       this.load.image('enemy', 'assets/enemy.png');
     },
