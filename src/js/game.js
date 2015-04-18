@@ -3,7 +3,6 @@
 
   function Game() {
     this.player = null;
-    this.growing = true;
   }
 
   Game.prototype = {
@@ -12,62 +11,105 @@
       this.background = this.add.sprite(this.game.width / 2, this.game.height / 2, 'background')
       this.background.anchor.setTo(0.5, 0.5);
 
-      var x = this.game.width / 2,
-          y = this.game.height - this.game.height / 4;
 
-      this.player = this.add.sprite(x, y, 'player');
+
+      this.score = 0 
+      this.topScore = localStorage.getItem('topScore')==null?0:localStorage.getItem('topScore');
+      var x = this.game.width / 2
+        , y = this.game.height / 2;
+
+      this.game.stage.backgroundColor = '#acacac';
+
+      this.scoreText = this.game.add.text(0,10,"-",{
+        font:"bold 16px Arial",
+        fill: "#ffffff"
+      });
+      
+      this.updateScore();
+
+      this.player = this.add.sprite(x, this.game.height/5*4, 'player');
       this.player.anchor.setTo(0.5, 0.5);
+      //this.input.onDown.add(this.onInputDown, this);
 
+      this.enemy = this.add.sprite(this.game.width, 0, 'fish');
+      this.enemy.scale.x *= 0.25;
+      this.enemy.scale.y *= 0.25;
+      this.enemy.anchor.set(0.5, 0.5);
 
-      this.fish = this.add.sprite(this.game.width, this.game.height / 2, 'fish')
-      this.fish.anchor.setTo(0.5, 0.5);
-      var tween = this.game.add.tween(this.fish);
-      tween.to({ x: -this.fish.width }, 1500, Phaser.Easing.Linear.None);
-      tween.start();
-
-      tween.onComplete.add(function () {
-        console.log('complete');
-        this.fish.scale.x *= -1;
-        var tween = this.game.add.tween(this.fish);
-        tween.to({ x: this.game.width + this.fish.width }, 1500, Phaser.Easing.Linear.None);
-        tween.start();
-      }.bind(this));
-
-      this.input.onDown.add(this.onInputDown, this);
-      this.game.stage.backgroundColor = 0xffffff;
+      this.placePlayer();
+      this.placeEnemy();
     },
 
     update: function () {
-      // var x, y, cx, cy, dx, dy, angle, scale;
-      // x = this.input.position.x;
-      // y = this.input.position.y;
-      // cx = this.world.centerX;
-      // cy = this.world.centerY;
-
-      // angle = Math.atan2(y - cy, x - cx) * (180 / Math.PI);
-      // this.fish.angle += 6;
-      var scaleFactor = 1.02;
-      // if (this.growing) {
-      //   this.player.scale.x *= scaleFactor;
-      //   this.player.scale.y *= scaleFactor;
-      //   if (this.player.scale.x > 1) {
-      //     this.growing = false
-      //   };
-      // } else {
-      //   this.player.scale.x /= scaleFactor;
-      //   this.player.scale.y /= scaleFactor;
-      //   if (this.player.scale.x < 0.2) {
-      //     this.growing = true
-      //   };
+      // if(Phaser.Math.distance(this.player.x, this.player.y, this.enemy.x, this.enemy.y)<this.player.width/2+this.enemy.width/2) {
+      //   // this.enemyTween.stop();
+      //   this.playerTween.stop();
+      //   this.score++;
+      //   console.log(Math.abs(this.player.x-this.enemy.x))
+      //   if(Math.abs(this.player.x-this.enemy.x)<10) {
+      //     this.score += 2;
+      //   }
+      //   this.placePlayer();
+      //   this.placeEnemy();
+      //   this.updateScore();
       // }
     },
 
-    onInputDown: function () {
-      var tween = this.game.add.tween(this.player);
-      tween.to({ y: 0 }, 1000, Phaser.Easing.Linear.None);
-      // tween.to({ x: this.game.width }, 2000, Phaser.Easing.Linear.None);
-      // tween.loop();
-      tween.start()
+    /*onInputDown: function () {
+      this.game.state.start('menu');
+    },*/
+
+    die: function() {
+      localStorage.setItem('topScore', Math.max(this.score, this.topScore));
+      this.game.state.start('game');
+    },
+
+    updateScore: function () {
+      this.scoreText.text = "Score: " + this.score + " - Best: " + this.topScore;
+    },
+
+    placePlayer: function() {
+      this.player.x = this.game.width/2;
+      this.player.y = this.game.height/5*4;
+      this.playerTween = this.game.add.tween(this.player).to({
+        y:this.game.height
+      },10000-this.score*10,"Linear",true);
+      this.playerTween.onComplete.add(this.die,this);
+      this.game.input.onDown.add(this.fire, this);
+  },
+
+    placeEnemy: function() {
+      this.enemy.x = this.game.width;
+      this.enemy.y = -this.enemy.width/2;
+      var enemyEnterTween = this.game.add.tween(this.enemy).to({
+        y: this.game.rnd.between(this.enemy.width*2,this.game.height/4*3-this.player.width/2)  
+      },200,"Linear",true);
+      enemyEnterTween.onComplete.add(this.moveEnemyLeft, this);
+    },
+
+    moveEnemyLeft: function() {
+      this.enemy.scale.x = 0.25;
+      var tween = this.game.add.tween(this.enemy);
+      tween.to({ x: 0 }, 1500, Phaser.Easing.Linear.None);
+      tween.onComplete.add(this.moveEnemyRight, this);
+      tween.start();
+    },
+
+    moveEnemyRight: function () {
+      this.enemy.scale.x = -0.25
+      var tween = this.game.add.tween(this.enemy);
+      tween.to({ x: this.game.width }, 1500, Phaser.Easing.Linear.None);
+      tween.onComplete.add(this.moveEnemyLeft, this);
+      tween.start();
+    },
+
+    fire: function() {
+      this.game.input.onDown.remove(this.fire, this);
+      this.playerTween.stop();
+      this.playerTween = this.game.add.tween(this.player).to({
+        y:-this.player.width
+      },500,"Linear",true);
+      this.playerTween.onComplete.add(this.die,this);
     }
 
   };

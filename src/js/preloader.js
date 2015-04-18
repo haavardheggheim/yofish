@@ -22,6 +22,7 @@
       this.load.image('background', 'assets/underwater.jpg');
       this.load.image('fish', 'assets/fish.png');
       this.load.bitmapFont('minecraftia', 'assets/minecraftia.png', 'assets/minecraftia.xml');
+      this.load.image('enemy', 'assets/enemy.png');
     },
 
     create: function () {
