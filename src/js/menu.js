@@ -12,11 +12,11 @@
       var x = this.game.width / 2
         , y = this.game.height / 2;
 
-      this.background = this.add.sprite(x, y, 'background')
+      this.background = this.add.sprite(x, y, 'background');
       this.background.anchor.setTo(0.5, 0.5);
 
-      var text = "yoFish";
-      var style = { font: "80px jungle", fill: "#ff0044" };
+      var text = 'yoFish';
+      var style = { font: '80px jungle', fill: '#ff0044' };
       var t = this.game.add.text(this.game.width/2, 50, text, style);
       t.anchor.setTo(0.5, 0.5);
 

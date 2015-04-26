@@ -21,7 +21,7 @@
       // this.game.scale.pageAlignHorizontally = true;
       // this.game.scale.setScreenSize(true);
 
-      this.game.add.text(0, 0, "preload fix", {font:"1px jungle", fill:"#FFFFFF"});
+      this.game.add.text(0, 0, 'preload fix', {font:'1px jungle', fill:'#FFFFFF'});
       this.game.state.start('preloader');
     }
   };

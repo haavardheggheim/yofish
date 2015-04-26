@@ -4,12 +4,6 @@ window.onload = function () {
   var game,
         ns = window['yofish'];
 
-  var playerTween;
-  var enemyTween;
-  var score = 0;
-  var scoreText;
-  var topScore;
-
   game = new Phaser.Game(320, 480, Phaser.AUTO, 'yofish-game');
   game.state.add('boot', ns.Boot);
   game.state.add('preloader', ns.Preloader);
